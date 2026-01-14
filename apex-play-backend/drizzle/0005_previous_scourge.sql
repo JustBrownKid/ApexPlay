@@ -1,0 +1,1 @@
+ALTER TABLE "users" ADD COLUMN "protalUser" boolean DEFAULT false NOT NULL;

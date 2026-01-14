@@ -1,0 +1,43 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type MovieCategory {
+  name: String!
+}
+
+type MovieToCategory {
+  category: MovieCategory!
+}
+
+type Movie {
+  id: Int!
+  title: String!
+  posterUrl: String!
+  rating: String!
+  duration: Float!
+  categories: [MovieToCategory!]!
+}
+
+type SeriesCategoryInfo {
+  name: String!
+}
+
+type SeriesToCategory {
+  category: SeriesCategoryInfo!
+}
+
+type Series {
+  id: Int!
+  title: String!
+  posterUrl: String!
+  rating: String!
+  categories: [SeriesToCategory!]!
+}
+
+type Query {
+  movies(limit: Int): [Movie!]!
+  moviesByCategory(categoryId: Int!): [Movie!]!
+  series(limit: Int): [Series!]!
+  seriesByCategory(categoryId: Int!): [Series!]!
+}
