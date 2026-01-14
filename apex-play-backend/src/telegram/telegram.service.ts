@@ -1,12 +1,22 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { InjectBot } from 'nestjs-telegraf';
 import { Telegraf, Context } from 'telegraf';
 
 @Injectable()
-export class TelegramService {
+export class TelegramService implements OnModuleInit {
     private readonly logger = new Logger(TelegramService.name);
 
     constructor(@InjectBot() private bot: Telegraf<Context>) { }
+
+    async onModuleInit() {
+        try {
+            const botInfo = await this.bot.telegram.getMe();
+            this.logger.log(`Telegram Bot connected: @${botInfo.username}`);
+        } catch (error) {
+            this.logger.error(`Telegram Bot ချိတ်မရသေးပါ (Timeout ဖြစ်နိုင်သည်): ${error.message}`);
+        }
+    }
+
     async sendOTP(tgid: string, otpCode: string): Promise<boolean> {
         const message = `<b>Admin Portal OTP</b>\n\nYour code is: <code>${otpCode}</code>\n\nExpires in 5 minutes.`;
         try {
@@ -17,6 +27,7 @@ export class TelegramService {
             return false;
         }
     }
+
     async sendLoginAlert(tgid: string, userName: string) {
         const alert = `<b>Login Success</b>\nUser <b>${userName}</b> has just accessed the portal.`;
         try {
